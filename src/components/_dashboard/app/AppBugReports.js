@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import combined from '@iconify/icon-park-outline/connection-arrow';
+import connectionArrow from '@iconify/icons-icon-park-outline/connection-arrow';
 // material
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
@@ -40,7 +40,7 @@ export default function AppBugReports() {
   return (
     <RootStyle>
       <IconWrapperStyle>
-        <Icon icon={combined} width={24} height={24} />
+        <Icon icon={connectionArrow} width={24} height={24} />
       </IconWrapperStyle>
       <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
