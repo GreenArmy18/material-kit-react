@@ -50,7 +50,7 @@ export default function AppWebsiteVisits() {
       y: {
         formatter: (y) => {
           if (typeof y !== 'undefined') {
-            return `${y.toFixed(0)} visits`;
+            return `${y.toFixed(0)} Mbps`;
           }
           return y;
         }
@@ -60,7 +60,7 @@ export default function AppWebsiteVisits() {
 
   return (
     <Card>
-      <CardHeader title="Last 10 Results" subheader="(+43%) than last year" />
+      <CardHeader title="Last 10 Results" subheader="(+43%) than last month" />
       <Box sx={{ p: 3, pb: 1 }} dir="ltr">
         <ReactApexChart type="line" series={CHART_DATA} options={chartOptions} height={364} />
       </Box>
