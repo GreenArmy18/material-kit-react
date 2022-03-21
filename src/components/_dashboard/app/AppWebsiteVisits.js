@@ -10,17 +10,17 @@ import { BaseOptionChart } from '../../charts';
 const CHART_DATA = [
   {
     name: 'Download',
-    type: 'column',
+    type: 'area',
     data: [163, 131, 144, 86, 13, 101, 207, 47, 399, 264, 182]
   },
   {
     name: 'Upload',
-    type: 'area',
+    type: 'line',
     data: [4, 4, 6, 9, 4, 9, 7, 9, 99, 87, 98]
   },
   {
     name: 'Ping',
-    type: 'line',
+    type: 'column',
     data: [24, 29, 21, 29, 46, 22, 23, 23, 33, 31, 31]
   }
 ];
