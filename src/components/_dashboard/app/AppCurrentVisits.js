@@ -43,7 +43,7 @@ export default function AppCurrentVisits() {
       theme.palette.warning.main,
       theme.palette.error.main
     ],
-    labels: ['Israel', 'USA', 'England', 'Brazil','Ukraine'],
+    labels: ['Israel', 'USA', 'England', 'Brazil', 'Ukraine'],
     stroke: { colors: [theme.palette.background.paper] },
     legend: { floating: true, horizontalAlign: 'center' },
     dataLabels: { enabled: true, dropShadow: { enabled: false } },

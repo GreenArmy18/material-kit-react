@@ -9,19 +9,19 @@ import { BaseOptionChart } from '../../charts';
 
 const CHART_DATA = [
   {
-    name: 'Team A',
+    name: 'Download',
     type: 'column',
-    data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
+    data: [163.0336363, 131.683385, 22, 27, 13, 22, 37, 21, 44, 22, 30]
   },
   {
-    name: 'Team B',
+    name: 'Upload',
     type: 'area',
-    data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
+    data: [4.16577002, 4.207767192, 41, 67, 22, 43, 21, 41, 56, 27, 43]
   },
   {
-    name: 'Team C',
+    name: 'Ping',
     type: 'line',
-    data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
+    data: [24.454, 29.157, 36, 30, 45, 35, 64, 52, 59, 36, 39]
   }
 ];
 
@@ -31,8 +31,8 @@ export default function AppWebsiteVisits() {
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid', 'gradient', 'solid'] },
     labels: [
-      '01/01/2003',
-      '02/01/2003',
+      '26/03/2021',
+      '01/04/2021',
       '03/01/2003',
       '04/01/2003',
       '05/01/2003',
@@ -60,7 +60,7 @@ export default function AppWebsiteVisits() {
 
   return (
     <Card>
-      <CardHeader title="Website Visits" subheader="(+43%) than last year" />
+      <CardHeader title="Last 10 Results" subheader="(+43%) than last year" />
       <Box sx={{ p: 3, pb: 1 }} dir="ltr">
         <ReactApexChart type="line" series={CHART_DATA} options={chartOptions} height={364} />
       </Box>
