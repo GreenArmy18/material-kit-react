@@ -34,7 +34,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-// const TOTAL = 714000;
+const TOTAL = '455.34Mbps';
 
 export default function AppWeeklySales() {
   return (
@@ -42,7 +42,7 @@ export default function AppWeeklySales() {
       <IconWrapperStyle>
         <Icon icon={androidFilled} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{455.34Mbps}</Typography>
+      <Typography variant="h3">{TOTAL}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Best Download
       </Typography>
