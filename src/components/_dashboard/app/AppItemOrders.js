@@ -4,7 +4,7 @@ import windowsFilled from '@iconify/icons-ant-design/windows-filled';
 import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 // utils
-//import { fShortenNumber } from '../../../utils/formatNumber';
+// import { fShortenNumber } from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-//const TOTAL = 1723315;
+// const TOTAL = 1723315;
 
 export default function AppItemOrders() {
   return (
