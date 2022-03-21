@@ -44,7 +44,7 @@ export default function AppNewUsers() {
       </IconWrapperStyle>
       <Typography variant="h3">{99.79}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
-      Best Upload
+        Best Upload
       </Typography>
     </RootStyle>
   );
