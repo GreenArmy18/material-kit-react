@@ -31,7 +31,7 @@ export default function AppWebsiteVisits() {
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid', 'gradient', 'solid'] },
     labels: [
-      '26/03/2021',
+      '01/01/2003',
       '02/01/2003',
       '03/01/2003',
       '04/01/2003',
@@ -60,7 +60,7 @@ export default function AppWebsiteVisits() {
 
   return (
     <Card>
-      <CardHeader title="Last 10 Results" subheader="(+43%) than last year" />
+      <CardHeader title="Website Visits" subheader="(+43%) than last year" />
       <Box sx={{ p: 3, pb: 1 }} dir="ltr">
         <ReactApexChart type="line" series={CHART_DATA} options={chartOptions} height={364} />
       </Box>
