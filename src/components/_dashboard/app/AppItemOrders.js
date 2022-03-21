@@ -42,7 +42,7 @@ export default function AppItemOrders() {
       <IconWrapperStyle>
         <Icon icon={windowsFilled} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{8}</Typography>
+      <Typography variant="h3">{'8ms'}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Best Ping
       </Typography>
