@@ -28,7 +28,6 @@ const LANGS = [
     label: 'Hebrew',
     icon: '/static/icons/ic_flag_he.svg'
   }
-
 ];
 
 // ----------------------------------------------------------------------
