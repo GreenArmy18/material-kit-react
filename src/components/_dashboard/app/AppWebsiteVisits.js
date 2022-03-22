@@ -29,7 +29,7 @@ export default function AppWebsiteVisits() {
   const chartOptions = merge(BaseOptionChart(), {
     stroke: { width: [0, 2, 3] },
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
-    fill: { type: ['solid', 'gradient', 'solid'] },
+    fill: { type: ['solid', 'solid', 'gradient'] },
     labels: [
       '01/01/2022',
       '02/01/2022',
