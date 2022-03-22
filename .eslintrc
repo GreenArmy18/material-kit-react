@@ -62,6 +62,10 @@
       }
     ],
     "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      },
       2,
       {
         "printWidth": 100,
