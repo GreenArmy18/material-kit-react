@@ -22,7 +22,13 @@ const LANGS = [
     value: 'fr',
     label: 'French',
     icon: '/static/icons/ic_flag_fr.svg'
+  },
+  {
+    value: 'he',
+    label: 'Hebrew',
+    icon: '/static/icons/ic_flag_he.svg'
   }
+
 ];
 
 // ----------------------------------------------------------------------
