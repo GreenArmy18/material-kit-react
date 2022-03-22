@@ -15,12 +15,12 @@ const CHART_DATA = [
   },
   {
     name: 'Upload',
-    type: 'area',
+    type: 'line',
     data: [4, 4, 6, 9, 4, 9, 7, 9, 99, 87, 98]
   },
   {
     name: 'Download',
-    type: 'line',
+    type: 'area',
     data: [163, 131, 144, 86, 13, 101, 207, 47, 399, 264, 182]
   }
 ];
