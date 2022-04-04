@@ -16,7 +16,7 @@ import {
   AppCurrentSubject,
   AppConversionRates
 } from '../components/_dashboard/app';
-
+import account from '../_mocks_/account';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
@@ -24,7 +24,7 @@ export default function DashboardApp() {
     <Page title="Speed Tests Dashboard">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
-          <Typography variant="h4">Hi, Welcome back</Typography>
+          <Typography variant="h4">Hi, {account.displayName}</Typography>
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>

@@ -102,10 +102,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
 
           <Box sx={{ textAlign: 'center' }}>
             <Typography gutterBottom variant="h6">
-              Get more?
+              Need Help?
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              From only $69
+              We're here to help
             </Typography>
           </Box>
 
@@ -115,7 +115,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             target="_blank"
             variant="contained"
           >
-            Upgrade to Pro
+            Contact Us
           </Button>
         </Stack>
       </Box>
