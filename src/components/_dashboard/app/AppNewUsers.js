@@ -6,7 +6,13 @@ import { Card, Typography } from '@mui/material';
 // utils
 // import { fShortenNumber } from '../../../utils/formatNumber';
 
+import speedTestData from '../../../data/speed_tests-data.json';
 // ----------------------------------------------------------------------
+
+// get the highest value from Upload row in speedTestData
+const highestUpload = speedTestData.map((row) => row.Upload).reduce((a, b) => Math.max(a, b));
+
+console.log('highestUpload', highestUpload);
 
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
@@ -33,8 +39,8 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
-const TOTAL = '99.79Mbps';
+// add Mbps to the highestUpload value
+const TOTAL = `${highestUpload} Mbps`;
 
 export default function AppNewUsers() {
   return (

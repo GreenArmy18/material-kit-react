@@ -5,8 +5,14 @@ import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 // utils
 // import { fShortenNumber } from '../../../utils/formatNumber';
-
+// import speed test data
+import speedTestData from '../../../data/speed_tests-data.json';
 // ----------------------------------------------------------------------
+
+// get the highest value from Download row in speedTestData
+const highestDownload = speedTestData.map((row) => row.Download).reduce((a, b) => Math.max(a, b));
+
+console.log('highestDownload', highestDownload);
 
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
@@ -34,7 +40,7 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = '455.34Mbps';
+const TOTAL = `${highestDownload} Mbps`;
 
 export default function AppWeeklySales() {
   return (

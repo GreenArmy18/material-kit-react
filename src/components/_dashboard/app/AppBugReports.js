@@ -5,8 +5,15 @@ import { alpha, styled } from '@mui/material/styles';
 import { Card, Typography } from '@mui/material';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
+import speedTestData from '../../../data/speed_tests-data.json';
 
 // ----------------------------------------------------------------------
+// get all the values and calculate the combined value
+const highestDownload = speedTestData.map((row) => row.Download).reduce((a, b) => Math.max(a, b));
+const highestUpload = speedTestData.map((row) => row.Upload).reduce((a, b) => Math.max(a, b));
+const lowestPing = speedTestData.map((row) => row.Ping).reduce((a, b) => Math.min(a, b));
+const bestCombined = highestDownload / 10 + highestUpload / 10 + lowestPing / 2;
+console.log('bestCombined', bestCombined);
 
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
@@ -33,8 +40,9 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
+// const TOTAL = `${lowestPing} ms`;
 
-const TOTAL = 234;
+const TOTAL = bestCombined;
 
 export default function AppBugReports() {
   return (

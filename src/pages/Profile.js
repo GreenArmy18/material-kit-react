@@ -1,15 +1,13 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Card, Stack, Link, Container, Typography } from '@mui/material';
+import { Box, Card, Link, Container, Typography } from '@mui/material';
 // layouts
 import AuthLayout from '../layouts/AuthLayout';
 // components
 import Page from '../components/Page';
 import { MHidden } from '../components/@material-extend';
-import { LoginForm } from '../components/authentication/login';
-import AuthSocial from '../components/authentication/AuthSocial';
-
+import { EditForm } from '../components/authentication/profile/index';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Page)(({ theme }) => ({
@@ -39,29 +37,30 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function Login() {
+export default function Register() {
   return (
-    <RootStyle title="Login | Minimal-UI">
+    <RootStyle title="Register | Minimal-UI">
       <MHidden width="mdDown">
         <SectionStyle>
           <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            Hi, Welcome Back
+            Manage the job more effectively with Minimal
           </Typography>
-          <img src="/static/illustrations/illustration_login.png" alt="login" />
+          <img alt="register" src="/static/illustrations/illustration_register.png" />
         </SectionStyle>
       </MHidden>
 
-      <Container maxWidth="sm">
+      <Container>
         <ContentStyle>
-          <Stack sx={{ mb: 5 }}>
+          <Box sx={{ mb: 5 }}>
             <Typography variant="h4" gutterBottom>
-              Sign in to Minimal
+              Edit your profile
             </Typography>
-            <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
-          </Stack>
-          <AuthSocial />
+            <Typography sx={{ color: 'text.secondary' }}>
+              Change your personal information or upload a new profile picture
+            </Typography>
+          </Box>
 
-          <LoginForm />
+          <EditForm />
         </ContentStyle>
       </Container>
     </RootStyle>

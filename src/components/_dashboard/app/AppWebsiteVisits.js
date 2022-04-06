@@ -4,46 +4,46 @@ import ReactApexChart from 'react-apexcharts';
 import { Card, CardHeader, Box } from '@mui/material';
 //
 import { BaseOptionChart } from '../../charts';
+import speedTestData from '../../../data/speed_tests-data.json';
 
 // ----------------------------------------------------------------------
-
+// get the last 10 donwload values from speedTestData
+const last10Download = speedTestData.map((row) => row.Download).slice(-10);
+// get the last 10 upload values from speedTestData
+const last10Upload = speedTestData.map((row) => row.Upload).slice(-10);
+// get the last 10 ping values from speedTestData
+const last10Ping = speedTestData.map((row) => row.Ping).slice(-10);
+console.log('last10Download', last10Download);
+console.log('last10Upload', last10Upload);
+console.log('last10Ping', last10Ping);
+// ----------------------------------------------------------------------
+// get the last 10 dates from speedTestData
+const last10Dates = speedTestData.map((row) => row.Date).slice(-10);
 const CHART_DATA = [
   {
     name: 'Ping',
     type: 'column',
-    data: [24, 29, 21, 29, 46, 22, 23, 23, 33, 31, 31]
+    data: last10Ping
   },
   {
     name: 'Upload',
     type: 'line',
-    data: [4, 4, 6, 9, 4, 9, 7, 9, 99, 87, 98]
+    data: last10Upload
   },
   {
     name: 'Download',
     type: 'area',
-    data: [163, 131, 144, 86, 13, 101, 207, 47, 399, 264, 182]
+    data: last10Download
   }
 ];
 
 export default function AppWebsiteVisits() {
   const chartOptions = merge(BaseOptionChart(), {
     stroke: { width: [0, 2, 3] },
+    // dataLabels: { enabled: true },
     plotOptions: { bar: { columnWidth: '11%', borderRadius: 4 } },
     fill: { type: ['solid', 'solid', 'gradient'] },
-    labels: [
-      '01/01/2022',
-      '02/01/2022',
-      '03/01/2022',
-      '04/01/2022',
-      '05/01/2022',
-      '06/01/2022',
-      '07/01/2022',
-      '08/01/2022',
-      '09/01/2022',
-      '10/01/2022',
-      '11/01/2022'
-    ],
-    xaxis: { type: 'datetime' },
+    labels: last10Dates,
     tooltip: {
       shared: true,
       intersect: false,
@@ -57,6 +57,8 @@ export default function AppWebsiteVisits() {
       }
     }
   });
+
+  console.log('chartOptions', chartOptions);
 
   return (
     <Card>

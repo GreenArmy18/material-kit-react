@@ -6,7 +6,13 @@ import { Card, Typography } from '@mui/material';
 // utils
 // import { fShortenNumber } from '../../../utils/formatNumber';
 
+import speedTestData from '../../../data/speed_tests-data.json';
 // ----------------------------------------------------------------------
+
+// get the lowest value from Ping row in speedTestData
+const lowestPing = speedTestData.map((row) => row.Ping).reduce((a, b) => Math.min(a, b));
+
+console.log('lowestPing', lowestPing);
 
 const RootStyle = styled(Card)(({ theme }) => ({
   boxShadow: 'none',
@@ -34,7 +40,8 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = '8ms';
+// add ms to the lowestPing value
+const TOTAL = `${lowestPing} ms`;
 
 export default function AppItemOrders() {
   return (

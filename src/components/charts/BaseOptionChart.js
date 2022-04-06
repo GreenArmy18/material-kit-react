@@ -156,7 +156,7 @@ export default function BaseOptionChart() {
     // Tooltip
     tooltip: {
       x: {
-        show: false
+        show: true
       }
     },
 
