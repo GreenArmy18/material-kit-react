@@ -18,37 +18,28 @@ import {
   Snackbar
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-
-// ----------------------------------------------------------------------
-
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://doblrlvtjcvflsooaqsj.supabase.co';
-const supabaseAnonKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvYmxybHZ0amN2Zmxzb29hcXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDgyODE2MzAsImV4cCI6MTk2Mzg1NzYzMH0.KSucW_sDBB7lUPR6Cjx0Z_zDWWRARzpTJZEiRTMvlIw';
-
-// Create a single supabase client for interacting with your database
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { supabase } from '../supabase-client';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
 
-  const handleClick = () => {
-    setOpen(true);
-    setLoading(true);
-  };
-  const [loading, setLoading] = React.useState(false);
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  const handleLoading = () => {
-    setOpen(true);
-    setLoading(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setLoading(false);
+    try {
+      setLoading(true);
+      const { error } = await supabase.auth.signIn({ email });
+      if (error) throw error;
+      alert('Check your email for the login link!');
+    } catch (error) {
+      alert(error.error_description || error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const LoginSchema = Yup.object().shape({
@@ -65,13 +56,9 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
-      setLoading(false);
       const { user, session, error } = supabase.auth.signIn({
         email: formik.values.email
       });
-      // set loading to false
-      console.log('Submitting', values.email);
-      console.log('user', user);
       // navigate('/dashboard', { replace: true });
     }
   });
@@ -80,34 +67,28 @@ export default function LoginForm() {
   console.log('loading', loading);
   return (
     <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+      <Form autoComplete="off" noValidate onSubmit={handleLogin}>
         <Stack sx={{ mb: 3 }}>
           <TextField
             fullWidth
-            autoComplete="username"
+            autoComplete="email"
             type="email"
             label="Email address"
             {...getFieldProps('email')}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </Stack>
 
-        <LoadingButton
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={loading}
-          onClick={handleClick}
-        >
+        <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loading}>
           Login
         </LoadingButton>
         <Snackbar
           open={open}
           autoHideDuration={3000}
           message="Check your email for the verification link"
-          onClose={handleClose}
         />
       </Form>
     </FormikProvider>

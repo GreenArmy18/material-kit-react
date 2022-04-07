@@ -22,9 +22,6 @@ export default () => {
       setSession(session);
     });
   }, []);
-  console.log('session', session);
-  console.log('supabase', supabase);
-  console.log(supabase.auth.user());
   return (
     <ThemeConfig>
       <ScrollToTop />

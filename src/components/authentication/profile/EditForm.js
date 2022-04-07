@@ -1,6 +1,5 @@
-import * as React from 'react';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Icon } from '@iconify/react';
 import { useFormik, Form, FormikProvider } from 'formik';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -9,156 +8,159 @@ import { useNavigate } from 'react-router-dom';
 // material
 import { Stack, TextField, IconButton, InputAdornment, Snackbar } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-
+import { supabase } from '../supabase-client';
+import Avatar from './Avatar';
 // ----------------------------------------------------------------------
 
-import { createClient } from '@supabase/supabase-js';
-import { values } from 'lodash';
+const EditForm = ({ session }) => {
+  const [loading, setLoading] = useState(true);
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [username, setNickName] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [loadingOut, setLoadingOut] = useState(false);
 
-const supabaseUrl = 'https://doblrlvtjcvflsooaqsj.supabase.co';
-const supabaseAnonKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRvYmxybHZ0amN2Zmxzb29hcXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDgyODE2MzAsImV4cCI6MTk2Mzg1NzYzMH0.KSucW_sDBB7lUPR6Cjx0Z_zDWWRARzpTJZEiRTMvlIw';
+  useEffect(() => {
+    getProfile();
+  }, [session]);
 
-// Create a single supabase client for interacting with your database
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  const getProfile = async () => {
+    try {
+      setLoading(true);
+      const user = supabase.auth.user();
+      // const { hh } = await supabase.fetch(`/users/${user.id}`);
+      console.log(user.user_metadata.first_name);
 
-// ----------------------------------------------------------------------
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select(`username, avatarUrl`, 'firstName', 'lastName')
+        .eq('id', user.id)
+        .single();
 
-export default function EditForm() {
-  const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [open, setOpen] = React.useState(false);
+      if (error && status !== 406) {
+        throw error;
+      }
 
-  const handleClick = () => {
-    setOpen(true);
-    setLoading(true);
-  };
-  const [loading, setLoading] = React.useState(false);
-
-  const handleLoading = () => {
-    setOpen(true);
-    setLoading(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setLoading(false);
-  };
-
-  const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('First name required'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
-    password: Yup.string().min(6, 'Too Short!').required('Password is required')
-  });
-
-  const formik = useFormik({
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: ''
-    },
-    validationSchema: RegisterSchema,
-    onSubmit: () => {
-      console.log(
-        'Submitting',
-        formik.values.email,
-        formik.values.password,
-        formik.values.firstName,
-        formik.values.lastName
-      );
-      const { user, session, error } = supabase.auth.update(
-        {
-          email: formik.values.email,
-          password: formik.values.password
-        },
-        {
-          data: {
-            first_name: formik.values.firstName,
-            last_name: formik.values.lastName
-          }
-        }
-      );
-      console.log('Updating', values.email, values.password, values.firstName, values.lastName);
-      // navigate('/login', { replace: true });
+      if (data) {
+        setNickName(data.username);
+        setAvatarUrl(data.avatarUrl);
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+      }
+    } catch (error) {
+      alert('HELLO');
+    } finally {
+      setLoading(false);
     }
-  });
+  };
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const updateProfile = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      const user = supabase.auth.user();
+      console.log('user', user);
+      const updates = {
+        id: user.id,
+        username,
+        avatarUrl,
+        firstName,
+        lastName
+      };
+
+      const { error } = await supabase.from('profiles').upsert(updates, {
+        returning: 'minimal' // Don't return the value after inserting
+      });
+
+      if (error) {
+        throw error;
+      } else {
+        alert('Profile updated successfully');
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      setLoadingOut(true);
+      const user = supabase.auth.user();
+
+      const { error } = supabase.auth.signOut();
+
+      if (error) {
+        throw error;
+      } else {
+        alert('Sign out successfully');
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoadingOut(false);
+    }
+  };
 
   return (
-    <FormikProvider value={formik}>
-      <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-        <Stack spacing={3}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              fullWidth
-              label="First name"
-              {...getFieldProps('firstName')}
-              error={Boolean(touched.firstName && errors.firstName)}
-              helperText={touched.firstName && errors.firstName}
-            />
-
-            <TextField
-              fullWidth
-              label="Last name"
-              {...getFieldProps('lastName')}
-              error={Boolean(touched.lastName && errors.lastName)}
-              helperText={touched.lastName && errors.lastName}
-            />
-          </Stack>
-
+    <form onSubmit={updateProfile}>
+      <Stack direction="column" align="center" justify="center" spacing={4} alignItems="center">
+        <Avatar
+          url={avatarUrl}
+          size={150}
+          onUpload={(url) => {
+            setAvatarUrl(url);
+            updateProfile({ username, firstName, lastName, avatarUrl: url });
+          }}
+        />
+      </Stack>
+      <Stack spacing={3} mt={3}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
           <TextField
             fullWidth
-            autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            id="firstName"
+            label="First name"
+            value={firstName || ''}
+            onChange={(e) => setFirstName(e.target.value)}
           />
 
           <TextField
             fullWidth
-            autoComplete="current-password"
-            type={showPassword ? 'text' : 'password'}
-            label="Password"
-            {...getFieldProps('password')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton edge="end" onClick={() => setShowPassword((prev) => !prev)}>
-                    <Icon icon={showPassword ? eyeFill : eyeOffFill} />
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-            error={Boolean(touched.password && errors.password)}
-            helperText={touched.password && errors.password}
-          />
-
-          <LoadingButton
-            fullWidth
-            size="large"
-            type="submit"
-            variant="contained"
-            loading={loading}
-            onClick={handleClick}
-          >
-            Update profile
-          </LoadingButton>
-          <Snackbar
-            open={open}
-            autoHideDuration={3000}
-            message="Your details have been updated"
-            onClose={handleClose}
+            id="lastName"
+            label="Last name"
+            value={lastName || ''}
+            onChange={(e) => setLastName(e.target.value)}
           />
         </Stack>
-      </Form>
-    </FormikProvider>
+
+        <TextField
+          fullWidth
+          autoComplete="username"
+          id="username"
+          type="text"
+          label="Nickname"
+          value={username || ''}
+          onChange={(e) => setNickName(e.target.value)}
+        />
+
+        <LoadingButton fullWidth size="large" type="submit" variant="contained" disabled={loading}>
+          Update profile
+        </LoadingButton>
+        <LoadingButton
+          fullWidth
+          size="large"
+          type="button"
+          variant="contained"
+          disabled={loadingOut}
+          onClick={() => signOut()}
+        >
+          Sign Out
+        </LoadingButton>
+      </Stack>
+    </form>
   );
-}
+};
+
+export default EditForm;

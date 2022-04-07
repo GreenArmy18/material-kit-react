@@ -58,8 +58,6 @@ export default function AppWebsiteVisits() {
     }
   });
 
-  console.log('chartOptions', chartOptions);
-
   return (
     <Card>
       <CardHeader title="Last 10 Results" subheader="(+43%) than last month" />
