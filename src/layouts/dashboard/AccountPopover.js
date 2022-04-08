@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
@@ -11,6 +11,7 @@ import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '
 import MenuPopover from '../../components/MenuPopover';
 //
 import account from '../../_mocks_/account';
+import { supabase } from '../../components/authentication/supabase-client';
 
 // ----------------------------------------------------------------------
 
@@ -34,9 +35,64 @@ const MENU_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover() {
+const AccountPopover = ({ session }) => {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [username, setNickName] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [email, setEmail] = useState(null);
+
+  useEffect(() => {
+    getProfile();
+  }, [session]);
+
+  const getProfile = async () => {
+    try {
+      const user = supabase.auth.user();
+      console.log('user', user);
+
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select(`firstName, lastName, username, avatarUrl`)
+        .eq('id', user.id)
+        .single();
+      console.log('data', data);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+
+      if (data) {
+        setNickName(data.username);
+        setAvatarUrl(data.avatarUrl);
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+        setEmail(user.email);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (avatarUrl) downloadImage(avatarUrl);
+  }, [avatarUrl]);
+
+  const downloadImage = async (path) => {
+    try {
+      const { data, error } = await supabase.storage.from('avatars').download(path);
+      if (error) {
+        throw error;
+      }
+      const url = URL.createObjectURL(data);
+      setAvatarUrl(url);
+    } catch (error) {
+      console.log('Error downloading image: ', error.message);
+    }
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -67,7 +123,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={avatarUrl} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -78,10 +134,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {account.displayName}
+            {`${firstName} ${lastName}` || 'New User'}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {email || 'New User'}
           </Typography>
         </Box>
 
@@ -117,4 +173,6 @@ export default function AccountPopover() {
       </MenuPopover>
     </>
   );
-}
+};
+
+export default AccountPopover;

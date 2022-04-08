@@ -12,12 +12,15 @@ export default ({ url, size, onUpload }) => {
   }, [url]);
 
   const downloadImage = async (path) => {
+    console.log('downloadImage', path);
     try {
       const { data, error } = await supabase.storage.from('avatars').download(path);
+      console.log('data', data);
       if (error) {
         throw error;
       }
       const url = URL.createObjectURL(data);
+      console.log('url', url);
       setAvatarUrl(url);
     } catch (error) {
       console.log('Error downloading image: ', error.message);

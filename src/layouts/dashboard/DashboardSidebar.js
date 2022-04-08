@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
@@ -13,6 +13,7 @@ import { MHidden } from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
 import account from '../../_mocks_/account';
 
+import { supabase } from '../../components/authentication/supabase-client';
 // ----------------------------------------------------------------------
 
 const DRAWER_WIDTH = 280;
@@ -34,12 +35,69 @@ const AccountStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-DashboardSidebar.propTypes = {
-  isOpenSidebar: PropTypes.bool,
-  onCloseSidebar: PropTypes.func
-};
+const DashboardSidebar = ({ isOpenSidebar, onCloseSidebar, session }) => {
+  DashboardSidebar.propTypes = {
+    isOpenSidebar: PropTypes.bool,
+    onCloseSidebar: PropTypes.func
+  };
 
-export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
+  const [username, setNickName] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+
+  useEffect(() => {
+    getProfile();
+  }, [session]);
+
+  const getProfile = async () => {
+    try {
+      const user = supabase.auth.user();
+      // const { hh } = await supabase.fetch(`/users/${user.id}`);
+      console.log(user.user_metadata.first_name);
+
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select(`firstName, lastName, username, avatarUrl`)
+        .eq('id', user.id)
+        .single();
+      console.log('data', data);
+
+      if (error && status !== 406) {
+        throw error;
+      }
+
+      if (data) {
+        setNickName(data.username);
+        setAvatarUrl(data.avatarUrl);
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (avatarUrl) downloadImage(avatarUrl);
+  }, [avatarUrl]);
+
+  const downloadImage = async (path) => {
+    console.log('downloadImage1', path);
+    try {
+      const { data, error } = await supabase.storage.from('avatars').download(path);
+      console.log('data1', data);
+      if (error) {
+        throw error;
+      }
+      const url = URL.createObjectURL(data);
+      console.log('url1', url);
+      setAvatarUrl(url);
+    } catch (error) {
+      console.log('Error downloading image1: ', error.message);
+    }
+  };
+
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -65,10 +123,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="/dashboard/profile">
           <AccountStyle>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src={avatarUrl} />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                {`${firstName} ${lastName}` || 'New User'}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                 {account.role}
@@ -152,4 +210,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       </MHidden>
     </RootStyle>
   );
-}
+};
+
+export default DashboardSidebar;

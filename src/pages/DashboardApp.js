@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 // material
 import { Box, Grid, Container, Typography } from '@mui/material';
 // components
@@ -16,15 +17,18 @@ import {
   AppCurrentSubject,
   AppConversionRates
 } from '../components/_dashboard/app';
-import account from '../_mocks_/account';
+import { useAppContext } from '../components/authentication/AppContext';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
+  const { user } = useAppContext();
+  console.log('firstName121', user);
+
   return (
     <Page title="Speed Tests Dashboard">
       <Container maxWidth="xl">
         <Box sx={{ pb: 5 }}>
-          <Typography variant="h4">Hi, {account.displayName}</Typography>
+          <Typography variant="h4">Hi, {`${user} ${user}` || 'New User'}</Typography>
         </Box>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>

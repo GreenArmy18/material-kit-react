@@ -28,12 +28,10 @@ const EditForm = ({ session }) => {
     try {
       setLoading(true);
       const user = supabase.auth.user();
-      // const { hh } = await supabase.fetch(`/users/${user.id}`);
-      console.log(user.user_metadata.first_name);
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`username, avatarUrl`, 'firstName', 'lastName')
+        .select(`firstName, lastName, username, avatarUrl`)
         .eq('id', user.id)
         .single();
 
@@ -48,7 +46,7 @@ const EditForm = ({ session }) => {
         setLastName(data.lastName);
       }
     } catch (error) {
-      alert('HELLO');
+      alert(error.message);
     } finally {
       setLoading(false);
     }
@@ -154,6 +152,7 @@ const EditForm = ({ session }) => {
           type="button"
           variant="contained"
           disabled={loadingOut}
+          href="/Login"
           onClick={() => signOut()}
         >
           Sign Out
